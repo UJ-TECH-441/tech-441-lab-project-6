@@ -1,0 +1,49 @@
+td {
+	white-space: nowrap;
+}
+
+#chart-table {
+	margin: auto;
+	border-spacing: 0;
+	border-collapse: separate;
+	margin-bottom: 20px;
+}
+
+#chart-table > tbody > tr > td {
+	padding: .2rem .7rem;
+	border-bottom: solid 1px #ccc;
+}
+
+#chart-table > tbody > tr > td > a {
+	font-weight: 500;
+}
+
+#chart-table tr:first-child td {
+	font-weight: 600;
+	background-color: #dedede;
+}
+
+#chart-table tr td:first-child {
+	font-weight: 800;
+	text-align: right;
+}
+
+.top-40 {
+	background-color: #f3f9fe;
+}
+
+.change-new {
+	color: #1469be;
+}
+
+.change-up {
+	color: #009f00;
+}
+
+.change-down {
+	color: #df0000;
+}
+
+.change-none {
+	color: #777;
+}
