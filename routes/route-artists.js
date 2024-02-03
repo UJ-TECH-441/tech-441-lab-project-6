@@ -3,7 +3,7 @@ const util = require('../util');
 const moment = require('moment/moment');
 
 module.exports = app => {
-	app.get('/fetch/artists', async (req, res, next) => {
+	app.get('/artists', async (req, res, next) => {
 		const data = await database.select(`select * from artist order by name`);
 		res.json(data[0]);
 	});

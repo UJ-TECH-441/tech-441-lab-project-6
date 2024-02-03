@@ -308,7 +308,7 @@ const fetchChartDates = chartId => {
 };
 
 const fetchArtists = artistId => {
-	fetch('/fetch/artists')
+	fetch('/artists')
 	.then(res => res.json())
 	.then(json => {
 		$('#artists').append(`<option value="">Select artist</option>`);
