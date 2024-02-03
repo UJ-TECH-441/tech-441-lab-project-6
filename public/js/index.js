@@ -6,7 +6,7 @@ $(document).ready(() => {
 	fetchArtists();
 	fetchChartDates();
 	getArtistGraph('897d563d-a26d-4561-abfc-c671e9c3db78');
-	//getTop100('1982-08-21');
+	getTop100('1980-01-05');
 });
 
 const clearTitles = () => {
