@@ -1,4 +1,5 @@
 let currentGraph;
+let currentScreen;
 
 $(document).ready(() => {
 	Chart.register(ChartDataLabels);
@@ -32,6 +33,7 @@ const getArtistGraph = async artistId => {
 	try {
 		if (!artistId) return;
 		clearTitles();
+		currentScreen = 'artist-graph';
 		fetch(`/artists/${artistId}/songs`)
 		.then(res => {
 			if (!res.ok) throw new Error(res.statusText);
@@ -45,17 +47,19 @@ const getArtistGraph = async artistId => {
 				'<div>Click titles to view chart performance graphs</div>';
 			$('#subtitle').html(subtitle);
 			const config = Object.assign({}, baseConfig);
-			config.data = Object.assign({}, baseData);
+			config.data = { datasets: Object.assign([], baseDatasets) };
 			config.data.labels = json.map(song => song.peak_week.substring(0, 10));
 			config.data.datasets[0].label = 'Chart Position';
 			config.data.datasets[0].data = json.map(song => song.peak_position);
+
 			config.options.onClick = event => {
 				const points = currentGraph.getElementsAtEventForMode(event, 'nearest', {intersect: true}, true);
 				if (points.length) getSongGraph(json[points[0].index].song_id);
 			};
+			config.options.plugins.datalabels.color = ctx => '#1880e7';
 			config.options.plugins.datalabels.align = ctx => ctx.dataIndex === 0 ? 'right' :
 				(json.length > 1 && ctx.dataIndex === json.length - 1) ? 'left' : 'bottom';
-			config.options.plugins.datalabels.formatter = (value, ctx) => json[ctx.dataIndex].song_title,
+			config.options.plugins.datalabels.formatter = (value, ctx) => `#${json[ctx.dataIndex].peak_position} ${json[ctx.dataIndex].song_title}`,
 			config.options.plugins.datalabels.listeners = {
 				click: (ctx, event) => getSongGraph(json[ctx.dataIndex].song_id)
 			}
@@ -71,6 +75,7 @@ const getSongGraph = async songId => {
 	try {
 		if (!songId) return;
 		clearTitles();
+		currentScreen = 'song-graph';
 		fetch(`/songs/${songId}/graph`)
 		.then(res => {
 			if (!res.ok) throw new Error(res.statusText);
@@ -103,7 +108,7 @@ const getSongGraph = async songId => {
 			});
 
 			const config = Object.assign({}, baseConfig);
-			config.data = Object.assign({}, baseData);
+			config.data = { datasets: Object.assign([], baseDatasets) };
 			config.data.labels = data.map(song => song.date.substring(0, 10));
 			config.data.datasets[0].label = 'Chart Position';
 			config.data.datasets[0].data = data.map(song => song.position);
@@ -111,6 +116,7 @@ const getSongGraph = async songId => {
 				const points = currentGraph.getElementsAtEventForMode(event, 'nearest', {intersect: true}, true);
 				if (points.length) getTop100(data[points[0].index].date.substring(0, 10));
 			};
+			config.options.plugins.datalabels.offset = 10;
 			config.options.plugins.datalabels.align = 'bottom';
 			config.options.plugins.datalabels.formatter = (value, ctx) => data[ctx.dataIndex].position;
 			config.options.plugins.datalabels.listeners = {
@@ -128,6 +134,7 @@ const getMultiSongGraph = async artistId => {
 	try {
 		if (!artistId) return;
 		clearTitles();
+		currentScreen = 'multi-song-graph';
 		fetch(`/artists/${artistId}/songs/graph`)
 		.then(res => {
 			if (!res.ok) throw new Error(res.statusText);
@@ -140,7 +147,7 @@ const getMultiSongGraph = async artistId => {
 				<div>Click titles to see details for specific songs or graph points to view full chart for corresponding week</div>
 			`);
 			const config = Object.assign({}, baseConfig);
-			config.data = Object.assign({}, baseData);
+			config.data = { datasets: Object.assign([], baseDatasets) };
 			config.data.labels = data.dates.map(date => date.substring(0, 10));
 			config.data.datasets = data.charts.map(song => {
 				const data = {};
@@ -185,6 +192,7 @@ const getMultiSongGraph = async artistId => {
 const getTop100 = async chartDate => {
 	try {
 		clearTitles();
+		currentScreen = 'top-100';
 		fetch(`/charts/${chartDate}`)
 		.then(res => {
 			if (!res.ok) throw new Error(res.statusText);
@@ -207,18 +215,16 @@ const getTop100 = async chartDate => {
 	}
 };
 
-const baseData = {
-	datasets: [{
-		borderColor: '#a8cff7',
-		clip: false,
-		pointRadius: 7,
-		pointBackgroundColor: '#1880e7',
-		pointBorderColor: '#1469be',
-		pointHoverRadius: 12,
-		pointHoverBackgroundColor: '#ffcc00',
-		pointHoverBorderColor: '#eabb00'
-	}]
-};
+const baseDatasets = [{
+	borderColor: '#bbccdd',
+	clip: false,
+	pointRadius: 7,
+	pointBackgroundColor: '#1880e7',
+	pointBorderColor: '#1469be',
+	pointHoverRadius: 12,
+	pointHoverBackgroundColor: '#ffcc00',
+	pointHoverBorderColor: '#eabb00'
+}];
 
 const baseConfig = {
 	type: 'line',
@@ -247,7 +253,8 @@ const baseConfig = {
 					family: 'Rubik,sans-serif',
 					weight: 500
 				},
-				rotation: 0
+				rotation: 0,
+				offset: 15
 			}
 		},
 		scales: {

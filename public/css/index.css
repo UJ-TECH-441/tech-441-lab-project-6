@@ -59,7 +59,6 @@ header {
 
 .subtitle {
 	text-align: center;
-	padding-top: 10px;
 }
 
 .subtitle > div, .subtitle > select {
@@ -86,7 +85,7 @@ main > div {
 #chartjs-canvas-container {
 	display: none;
 	position: relative;
-	width: 99vw;
+	width: 98vw;
 }
 
 #chartjs-canvas-container > span {
@@ -95,7 +94,7 @@ main > div {
 
 #chartjs-canvas {
 	position: relative;
-	width: 100vw;
+	width: 98vw;
 	height: 40vh;
 }
 
