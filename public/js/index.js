@@ -95,13 +95,15 @@ const getSongGraph = async songId => {
 				return res.json();
 			})
 			.then(otherSongs => {
-				const artistOtherSongs = document.createElement('select');
-				$(artistOtherSongs).attr('id', 'artist-other-songs');
-				$(artistOtherSongs).append(`<option value="">Other songs by ${data[0].artist_name}</option>`);
-				otherSongs.forEach(song =>
-					$(artistOtherSongs).append(`<option value="${song.song_id}">${song.song_title} (#${song.peak_position}, ${song.first_week.substring(0, 4)})</option>`));
-				$(artistOtherSongs).on('change', () => getSongGraph($(artistOtherSongs).val()));
-				$(artistOtherSongs).prependTo($('#subtitle'));
+				if (otherSongs.length > 1) {
+					const artistOtherSongs = document.createElement('select');
+					$(artistOtherSongs).attr('id', 'artist-other-songs');
+					$(artistOtherSongs).append(`<option value="">Other songs by ${data[0].artist_name}</option>`);
+					otherSongs.forEach(song =>
+						$(artistOtherSongs).append(`<option value="${song.song_id}">${song.song_title} (#${song.peak_position}, ${song.first_week.substring(0, 4)})</option>`));
+					$(artistOtherSongs).on('change', () => getSongGraph($(artistOtherSongs).val()));
+					$(artistOtherSongs).prependTo($('#subtitle'));
+				}
 			})
 			.catch(err => {
 				console.error(err);
