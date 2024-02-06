@@ -59,7 +59,11 @@ const getArtistGraph = async artistId => {
 			config.options.plugins.datalabels.color = ctx => '#1880e7';
 			config.options.plugins.datalabels.align = ctx => ctx.dataIndex === 0 ? 'right' :
 				(json.length > 1 && ctx.dataIndex === json.length - 1) ? 'left' : 'bottom';
-			config.options.plugins.datalabels.formatter = (value, ctx) => `#${json[ctx.dataIndex].peak_position} ${json[ctx.dataIndex].song_title}`,
+			config.options.plugins.datalabels.formatter = (value, ctx) => {
+				let title = json[ctx.dataIndex].song_title;
+				if (title.length >= 8) title = title.replace(/^(.{8}\w*)\s/, '$1\n');
+				return `#${json[ctx.dataIndex].peak_position} ${title}`;
+			};
 			config.options.plugins.datalabels.listeners = {
 				click: (ctx, event) => getSongGraph(json[ctx.dataIndex].song_id)
 			}
@@ -244,7 +248,7 @@ const baseConfig = {
 					font: {
 						family: 'Rubik,sans-serif',
 						size: 13,
-						weight: 500
+						weight: 600
 					}
 				}
 			},
@@ -253,7 +257,7 @@ const baseConfig = {
 				font: {
 					size: 16,
 					family: 'Rubik,sans-serif',
-					weight: 500
+					weight: 600
 				},
 				rotation: 0,
 				offset: 15

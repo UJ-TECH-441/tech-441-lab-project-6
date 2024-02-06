@@ -15,7 +15,7 @@ td {
 }
 
 #chart-table > tbody > tr > td > a {
-	font-weight: 500;
+	font-weight: 600;
 }
 
 #chart-table tr:first-child td {
@@ -24,7 +24,7 @@ td {
 }
 
 #chart-table tr td:first-child {
-	font-weight: 800;
+	font-weight: 600;
 	text-align: right;
 }
 
